@@ -3,9 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const locales = ['ar', 'en'];
 const defaultLocale = 'ar';
 
-function getLocale(request: NextRequest): string {
-  const acceptLanguage = request.headers.get('accept-language') || '';
-  if (acceptLanguage.includes('en')) return 'en';
+function getLocale(_request: NextRequest): string {
   return defaultLocale;
 }
 
