@@ -20,7 +20,12 @@ import homepageRoutes from './routes/homepageRoutes';
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.clientUrl, credentials: true }));
+app.use(cors({
+  origin: env.nodeEnv === 'production'
+    ? [env.clientUrl, /\.vercel\.app$/]
+    : env.clientUrl,
+  credentials: true,
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // Routes
