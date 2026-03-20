@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import gsap from 'gsap';
 import { localizeNum } from '@/lib/utils';
 
 interface GalleryItem {
@@ -27,9 +26,9 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
   const rafRef = useRef<number>(0);
 
   const totalCount = items.length;
-  const scrollMultiplier = 5; // how many viewport heights of scroll space
+  const scrollMultiplier = 5;
 
-  const onScroll = useCallback(() => {
+  const onFrame = useCallback(() => {
     const wrapper = wrapperRef.current;
     const sticky = stickyRef.current;
     const indexEl = indexRef.current;
@@ -38,73 +37,59 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
     if (!wrapper || !sticky || !indexEl || !imagesContainer || !namesContainer) return;
 
     const wrapperRect = wrapper.getBoundingClientRect();
-    const wrapperTop = -wrapperRect.top;
     const scrollRange = wrapper.offsetHeight - window.innerHeight;
-
     if (scrollRange <= 0) return;
 
-    const progress = Math.max(0, Math.min(1, wrapperTop / scrollRange));
+    const progress = Math.max(0, Math.min(1, -wrapperRect.top / scrollRange));
 
-    const stickyHeight = sticky.offsetHeight;
+    const vh = window.innerHeight;
     const stickyPadding = parseFloat(getComputedStyle(sticky).paddingTop) || 32;
     const indexHeight = indexEl.offsetHeight;
     const namesHeight = namesContainer.offsetHeight;
     const imagesHeight = imagesContainer.offsetHeight;
 
-    const moveDistanceIndex = stickyHeight - stickyPadding * 2 - indexHeight;
-    const moveDistanceNames = stickyHeight - stickyPadding * 2 - namesHeight;
-    const moveDistanceImages = window.innerHeight - imagesHeight;
-    const imgActivationThreshold = window.innerHeight / 2;
+    const moveIndex = vh - stickyPadding * 2 - indexHeight;
+    const moveNames = vh - stickyPadding * 2 - namesHeight;
+    const moveImages = vh - imagesHeight;
+    const midpoint = vh / 2;
 
-    // Counter
+    // Counter text
     const currentIndex = Math.min(Math.floor(progress * totalCount) + 1, totalCount);
     const locale = rtl ? 'ar' : 'en';
-    const padNum = (n: number) => localizeNum(String(n).padStart(2, '0'), locale);
-    indexEl.textContent = `${padNum(currentIndex)}/${padNum(totalCount)}`;
+    const pad = (n: number) => localizeNum(String(n).padStart(2, '0'), locale);
+    indexEl.textContent = `${pad(currentIndex)}/${pad(totalCount)}`;
 
-    // Move elements
-    gsap.set(indexEl, { y: progress * moveDistanceIndex });
-    gsap.set(imagesContainer, { y: progress * moveDistanceImages });
+    // Move — using raw style to avoid GSAP overwriting CSS transforms
+    indexEl.style.transform = `translateY(${progress * moveIndex}px)`;
+    imagesContainer.style.transform = `translateX(-50%) translateY(${progress * moveImages}px)`;
 
-    // Image opacity
+    // Image activation
     imgRefs.current.forEach((img) => {
       if (!img) return;
       const rect = img.getBoundingClientRect();
-      if (rect.top <= imgActivationThreshold && rect.bottom >= imgActivationThreshold) {
-        gsap.set(img, { opacity: 1 });
-      } else {
-        gsap.set(img, { opacity: 0.5 });
-      }
+      img.style.opacity = (rect.top <= midpoint && rect.bottom >= midpoint) ? '1' : '0.5';
     });
 
     // Names
-    nameRefs.current.forEach((p, index) => {
+    nameRefs.current.forEach((p, i) => {
       if (!p) return;
-      const startProgress = index / totalCount;
-      const endProgress = (index + 1) / totalCount;
-      const projectProgress = Math.max(
-        0,
-        Math.min(1, (progress - startProgress) / (endProgress - startProgress))
-      );
+      const start = i / totalCount;
+      const end = (i + 1) / totalCount;
+      const nameProg = Math.max(0, Math.min(1, (progress - start) / (end - start)));
 
-      gsap.set(p, { y: -projectProgress * moveDistanceNames });
-
-      if (projectProgress > 0 && projectProgress < 1) {
-        gsap.set(p, { color: '#fff' });
-      } else {
-        gsap.set(p, { color: '#4a4a4a' });
-      }
+      p.style.transform = `translateY(${-nameProg * moveNames}px)`;
+      p.style.color = (nameProg > 0 && nameProg < 1) ? '#fff' : '#4a4a4a';
     });
   }, [totalCount, rtl]);
 
   useEffect(() => {
     const tick = () => {
-      onScroll();
+      onFrame();
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [onScroll]);
+  }, [onFrame]);
 
   return (
     <>
@@ -114,16 +99,16 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
         </section>
       )}
 
-      {/* Tall wrapper creates the scroll space; sticky child stays in view */}
+      {/* Tall wrapper = scroll space. Sticky child = stays in view */}
       <div
         ref={wrapperRef}
-        style={{ height: `${scrollMultiplier * 100}vh`, position: 'relative' }}
-        className="bg-[#141414]"
+        style={{ height: `${scrollMultiplier * 100}vh` }}
+        className="relative bg-[#141414]"
       >
         <div
           ref={stickyRef}
           className="spotlight-section"
-          style={{ position: 'sticky', top: 0, padding: '2rem', direction: 'ltr' }}
+          style={{ position: 'sticky', top: 0 }}
         >
           <div className="spotlight-index" style={rtl ? { position: 'absolute', right: '2rem', top: '2rem' } : {}}>
             <h1 ref={(el) => {
