@@ -2,23 +2,20 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { localizeNum } from '@/lib/utils';
 
-interface GalleryItem {
-  image: string;
-  name: string;
-}
+gsap.registerPlugin(ScrollTrigger);
 
 interface SpotlightGalleryProps {
-  items: GalleryItem[];
+  items: { image: string; name: string }[];
   introText?: string;
   outroText?: string;
   rtl?: boolean;
 }
 
 export default function SpotlightGallery({ items, introText, outroText, rtl = false }: SpotlightGalleryProps) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLElement>(null);
   const indexRef = useRef<HTMLHeadingElement>(null);
   const imagesContainerRef = useRef<HTMLDivElement>(null);
   const namesContainerRef = useRef<HTMLDivElement>(null);
@@ -26,102 +23,74 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
   const nameRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
   const totalCount = items.length;
-  const SCROLL_PAGES = 5;
 
   useEffect(() => {
-    const wrapper = wrapperRef.current;
-    const section = stickyRef.current;
+    if (typeof window === 'undefined' || totalCount === 0) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const section = spotlightRef.current;
     const indexEl = indexRef.current;
     const imagesContainer = imagesContainerRef.current;
     const namesContainer = namesContainerRef.current;
-    if (!wrapper || !section || !indexEl || !imagesContainer || !namesContainer || totalCount === 0) return;
+    if (!section || !indexEl || !imagesContainer || !namesContainer) return;
 
-    // Set wrapper height to create scroll space
-    wrapper.style.height = `${SCROLL_PAGES * window.innerHeight}px`;
+    let trigger: ScrollTrigger | null = null;
 
-    const vh = window.innerHeight;
-    const stickyPadding = parseFloat(getComputedStyle(section).paddingTop) || 32;
-
-    function onScrollUpdate() {
-      if (!wrapper || !section || !indexEl || !imagesContainer || !namesContainer) return;
-      const scrollY = window.scrollY;
-      const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
-      const scrollRange = wrapper.offsetHeight - vh;
-
-      // Progress: 0 when wrapper top is at viewport top, 1 when scrolled through
-      let progress = (scrollY - wrapperTop) / scrollRange;
-      progress = Math.max(0, Math.min(1, progress));
-
-      // Pin the section manually: fixed when in range, absolute at end
-      if (scrollY >= wrapperTop && scrollY <= wrapperTop + scrollRange) {
-        section.style.position = 'fixed';
-        section.style.top = '0';
-        section.style.left = '0';
-        section.style.width = '100%';
-      } else if (scrollY > wrapperTop + scrollRange) {
-        section.style.position = 'absolute';
-        section.style.top = `${scrollRange}px`;
-        section.style.left = '0';
-        section.style.width = '100%';
-      } else {
-        section.style.position = 'absolute';
-        section.style.top = '0';
-        section.style.left = '0';
-        section.style.width = '100%';
-      }
-
-      // Measurements (cached per frame is fine)
+    // Delay one frame so Lenis connects to ScrollTrigger first
+    const frameId = requestAnimationFrame(() => {
+      const sectionHeight = section.offsetHeight;
+      const sectionPadding = parseFloat(getComputedStyle(section).paddingTop) || 32;
       const indexHeight = indexEl.offsetHeight;
       const namesHeight = namesContainer.offsetHeight;
       const imagesHeight = imagesContainer.offsetHeight;
 
-      const moveIndex = vh - stickyPadding * 2 - indexHeight;
-      const moveNames = vh - stickyPadding * 2 - namesHeight;
-      const moveImages = vh - imagesHeight;
-      const midpoint = vh / 2;
+      const moveDistanceIndex = sectionHeight - sectionPadding * 2 - indexHeight;
+      const moveDistanceNames = sectionHeight - sectionPadding * 2 - namesHeight;
+      const moveDistanceImages = window.innerHeight - imagesHeight;
+      const imgActivationThreshold = window.innerHeight / 2;
 
-      // Counter
-      const currentIndex = Math.min(Math.floor(progress * totalCount) + 1, totalCount);
-      const locale = rtl ? 'ar' : 'en';
-      const pad = (n: number) => localizeNum(String(n).padStart(2, '0'), locale);
-      indexEl.textContent = `${pad(currentIndex)}/${pad(totalCount)}`;
+      trigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: `+=${window.innerHeight * 5}px`,
+        pin: true,
+        pinSpacing: true,
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const currentIndex = Math.min(Math.floor(progress * totalCount) + 1, totalCount);
 
-      // Move elements
-      indexEl.style.transform = `translateY(${progress * moveIndex}px)`;
-      imagesContainer.style.transform = `translateX(-50%) translateY(${progress * moveImages}px)`;
+          const locale = rtl ? 'ar' : 'en';
+          const padNum = (n: number) => localizeNum(String(n).padStart(2, '0'), locale);
+          indexEl.textContent = `${padNum(currentIndex)}/${padNum(totalCount)}`;
 
-      // Image activation
-      imgRefs.current.forEach((img) => {
-        if (!img) return;
-        const rect = img.getBoundingClientRect();
-        img.style.opacity = (rect.top <= midpoint && rect.bottom >= midpoint) ? '1' : '0.5';
+          gsap.set(indexEl, { y: progress * moveDistanceIndex });
+          gsap.set(imagesContainer, { y: progress * moveDistanceImages });
+
+          imgRefs.current.forEach((img) => {
+            if (!img) return;
+            const rect = img.getBoundingClientRect();
+            gsap.set(img, {
+              opacity: (rect.top <= imgActivationThreshold && rect.bottom >= imgActivationThreshold) ? 1 : 0.5,
+            });
+          });
+
+          nameRefs.current.forEach((p, index) => {
+            if (!p) return;
+            const startProgress = index / totalCount;
+            const endProgress = (index + 1) / totalCount;
+            const projectProgress = Math.max(0, Math.min(1, (progress - startProgress) / (endProgress - startProgress)));
+
+            gsap.set(p, { y: -projectProgress * moveDistanceNames });
+            gsap.set(p, { color: (projectProgress > 0 && projectProgress < 1) ? '#fff' : '#4a4a4a' });
+          });
+        },
       });
-
-      // Names
-      nameRefs.current.forEach((p, i) => {
-        if (!p) return;
-        const start = i / totalCount;
-        const end = (i + 1) / totalCount;
-        const np = Math.max(0, Math.min(1, (progress - start) / (end - start)));
-        p.style.transform = `translateY(${-np * moveNames}px)`;
-        p.style.color = (np > 0 && np < 1) ? '#fff' : '#4a4a4a';
-      });
-    }
-
-    // Drive from GSAP ticker (synced with Lenis)
-    gsap.ticker.add(onScrollUpdate);
-
-    const handleResize = () => {
-      wrapper.style.height = `${SCROLL_PAGES * window.innerHeight}px`;
-    };
-    window.addEventListener('resize', handleResize);
+    });
 
     return () => {
-      gsap.ticker.remove(onScrollUpdate);
-      window.removeEventListener('resize', handleResize);
-      // Reset section position on unmount
-      section.style.position = '';
-      section.style.top = '';
+      cancelAnimationFrame(frameId);
+      trigger?.kill();
     };
   }, [totalCount, rtl]);
 
@@ -133,48 +102,39 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
         </section>
       )}
 
-      {/* Tall wrapper — creates scroll space */}
-      <div ref={wrapperRef} className="relative bg-[#141414]">
-        <div
-          ref={stickyRef}
-          className="spotlight-section"
-          style={{ direction: 'ltr' }}
-        >
-          <div className="spotlight-index" style={rtl ? { position: 'absolute', right: '2rem', top: '2rem' } : {}}>
-            <h1 ref={(el) => {
-              (indexRef as any).current = el;
-              if (el && !el.textContent) {
-                const locale = rtl ? 'ar' : 'en';
-                el.textContent = `${localizeNum('01', locale)}/${localizeNum(String(totalCount).padStart(2, '0'), locale)}`;
-              }
-            }} />
-          </div>
-
-          <div ref={imagesContainerRef} className="spotlight-images">
-            {items.map((item, i) => (
-              <div
-                key={i}
-                ref={(el) => { imgRefs.current[i] = el; }}
-                className="spotlight-img"
-              >
-                <img src={item.image} alt={item.name} loading="eager" />
-              </div>
-            ))}
-          </div>
-
-          <div
-            ref={namesContainerRef}
-            className="spotlight-names"
-            style={rtl ? { right: 'auto', left: '2rem', alignItems: 'flex-start' } : {}}
-          >
-            {items.map((item, i) => (
-              <p key={i} ref={(el) => { nameRefs.current[i] = el; }}>
-                {item.name}
-              </p>
-            ))}
-          </div>
+      <section
+        ref={spotlightRef}
+        className="spotlight-section"
+        style={{ direction: 'ltr' }}
+      >
+        <div className="spotlight-index" style={rtl ? { position: 'absolute', right: '2rem', top: '2rem' } : {}}>
+          <h1 ref={(el) => {
+            (indexRef as any).current = el;
+            if (el && !el.textContent) {
+              const locale = rtl ? 'ar' : 'en';
+              el.textContent = `${localizeNum('01', locale)}/${localizeNum(String(totalCount).padStart(2, '0'), locale)}`;
+            }
+          }} />
         </div>
-      </div>
+
+        <div ref={imagesContainerRef} className="spotlight-images">
+          {items.map((item, i) => (
+            <div key={i} ref={(el) => { imgRefs.current[i] = el; }} className="spotlight-img">
+              <img src={item.image} alt={item.name} loading="eager" />
+            </div>
+          ))}
+        </div>
+
+        <div
+          ref={namesContainerRef}
+          className="spotlight-names"
+          style={rtl ? { right: 'auto', left: '2rem', alignItems: 'flex-start' } : {}}
+        >
+          {items.map((item, i) => (
+            <p key={i} ref={(el) => { nameRefs.current[i] = el; }}>{item.name}</p>
+          ))}
+        </div>
+      </section>
 
       {outroText && (
         <section className="h-screen flex items-center justify-center bg-[#141414]">

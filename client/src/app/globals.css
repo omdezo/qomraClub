@@ -20,7 +20,7 @@
 @layer base {
   body {
     @apply bg-primary text-white;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* ClassicNums first → renders digits as Playfair Display, everything else falls through to Dialogue Me */
