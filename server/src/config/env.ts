@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
-import path from 'path';
 
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+// Only load .env file in local dev — Vercel injects env vars directly
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 export const env = {
   port: parseInt(process.env.PORT || '5000', 10),
