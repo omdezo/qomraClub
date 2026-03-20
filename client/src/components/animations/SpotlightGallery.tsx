@@ -120,7 +120,7 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
         <div ref={imagesContainerRef} className="spotlight-images">
           {items.map((item, i) => (
             <div key={i} ref={(el) => { imgRefs.current[i] = el; }} className="spotlight-img">
-              <img src={item.image} alt={item.name} loading="eager" />
+              <img src={item.image} alt="" loading="eager" />
             </div>
           ))}
         </div>
