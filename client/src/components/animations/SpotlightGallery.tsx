@@ -43,7 +43,7 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
     const stickyPadding = parseFloat(getComputedStyle(section).paddingTop) || 32;
 
     function onScrollUpdate() {
-      if (!wrapper || !section) return;
+      if (!wrapper || !section || !indexEl || !imagesContainer || !namesContainer) return;
       const scrollY = window.scrollY;
       const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
       const scrollRange = wrapper.offsetHeight - vh;
