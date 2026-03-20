@@ -1,11 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { localizeNum } from '@/lib/utils';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface GalleryItem {
   image: string;
@@ -20,103 +17,94 @@ interface SpotlightGalleryProps {
 }
 
 export default function SpotlightGallery({ items, introText, outroText, rtl = false }: SpotlightGalleryProps) {
-  const spotlightRef = useRef<HTMLElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef<HTMLHeadingElement>(null);
   const imagesContainerRef = useRef<HTMLDivElement>(null);
   const namesContainerRef = useRef<HTMLDivElement>(null);
   const imgRefs = useRef<(HTMLDivElement | null)[]>([]);
   const nameRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const rafRef = useRef<number>(0);
 
   const totalCount = items.length;
+  const scrollMultiplier = 5; // how many viewport heights of scroll space
 
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const section = spotlightRef.current;
+  const onScroll = useCallback(() => {
+    const wrapper = wrapperRef.current;
+    const sticky = stickyRef.current;
     const indexEl = indexRef.current;
     const imagesContainer = imagesContainerRef.current;
     const namesContainer = namesContainerRef.current;
-    if (!section || !indexEl || !imagesContainer || !namesContainer || totalCount === 0) return;
+    if (!wrapper || !sticky || !indexEl || !imagesContainer || !namesContainer) return;
 
-    let trigger: ScrollTrigger | null = null;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const wrapperTop = -wrapperRect.top;
+    const scrollRange = wrapper.offsetHeight - window.innerHeight;
 
-    const setup = () => {
-      // Prevent double setup
-      if (trigger) return;
+    if (scrollRange <= 0) return;
 
-      const sectionHeight = section.offsetHeight;
-      const sectionPadding = parseFloat(getComputedStyle(section).paddingTop) || 32;
-      const indexHeight = indexEl.offsetHeight;
-      const namesHeight = namesContainer.offsetHeight;
-      const imagesHeight = imagesContainer.offsetHeight;
+    const progress = Math.max(0, Math.min(1, wrapperTop / scrollRange));
 
-      const moveDistanceIndex = sectionHeight - sectionPadding * 2 - indexHeight;
-      const moveDistanceNames = sectionHeight - sectionPadding * 2 - namesHeight;
-      const moveDistanceImages = window.innerHeight - imagesHeight;
-      const imgActivationThreshold = window.innerHeight / 2;
+    const stickyHeight = sticky.offsetHeight;
+    const stickyPadding = parseFloat(getComputedStyle(sticky).paddingTop) || 32;
+    const indexHeight = indexEl.offsetHeight;
+    const namesHeight = namesContainer.offsetHeight;
+    const imagesHeight = imagesContainer.offsetHeight;
 
-      trigger = ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: `+=${window.innerHeight * 5}px`,
-        pin: true,
-        pinSpacing: true,
-        scrub: 1,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const currentIndex = Math.min(Math.floor(progress * totalCount) + 1, totalCount);
+    const moveDistanceIndex = stickyHeight - stickyPadding * 2 - indexHeight;
+    const moveDistanceNames = stickyHeight - stickyPadding * 2 - namesHeight;
+    const moveDistanceImages = window.innerHeight - imagesHeight;
+    const imgActivationThreshold = window.innerHeight / 2;
 
-          const locale = rtl ? 'ar' : 'en';
-          const padNum = (n: number) => localizeNum(String(n).padStart(2, '0'), locale);
-          indexEl.textContent = `${padNum(currentIndex)}/${padNum(totalCount)}`;
+    // Counter
+    const currentIndex = Math.min(Math.floor(progress * totalCount) + 1, totalCount);
+    const locale = rtl ? 'ar' : 'en';
+    const padNum = (n: number) => localizeNum(String(n).padStart(2, '0'), locale);
+    indexEl.textContent = `${padNum(currentIndex)}/${padNum(totalCount)}`;
 
-          gsap.set(indexEl, { y: progress * moveDistanceIndex });
-          gsap.set(imagesContainer, { y: progress * moveDistanceImages });
+    // Move elements
+    gsap.set(indexEl, { y: progress * moveDistanceIndex });
+    gsap.set(imagesContainer, { y: progress * moveDistanceImages });
 
-          imgRefs.current.forEach((img) => {
-            if (!img) return;
-            const rect = img.getBoundingClientRect();
-            if (rect.top <= imgActivationThreshold && rect.bottom >= imgActivationThreshold) {
-              gsap.set(img, { opacity: 1 });
-            } else {
-              gsap.set(img, { opacity: 0.5 });
-            }
-          });
-
-          nameRefs.current.forEach((p, index) => {
-            if (!p) return;
-            const startProgress = index / totalCount;
-            const endProgress = (index + 1) / totalCount;
-            const projectProgress = Math.max(
-              0,
-              Math.min(1, (progress - startProgress) / (endProgress - startProgress))
-            );
-
-            gsap.set(p, { y: -projectProgress * moveDistanceNames });
-
-            if (projectProgress > 0 && projectProgress < 1) {
-              gsap.set(p, { color: '#fff' });
-            } else {
-              gsap.set(p, { color: '#4a4a4a' });
-            }
-          });
-        },
-      });
-
-      ScrollTrigger.refresh();
-    };
-
-    // Image containers have CSS aspect-ratio so dimensions are known.
-    // Just run setup on next frame to ensure layout is settled.
-    const frameId = requestAnimationFrame(() => {
-      setup();
+    // Image opacity
+    imgRefs.current.forEach((img) => {
+      if (!img) return;
+      const rect = img.getBoundingClientRect();
+      if (rect.top <= imgActivationThreshold && rect.bottom >= imgActivationThreshold) {
+        gsap.set(img, { opacity: 1 });
+      } else {
+        gsap.set(img, { opacity: 0.5 });
+      }
     });
 
-    return () => {
-      cancelAnimationFrame(frameId);
-      trigger?.kill();
-    };
+    // Names
+    nameRefs.current.forEach((p, index) => {
+      if (!p) return;
+      const startProgress = index / totalCount;
+      const endProgress = (index + 1) / totalCount;
+      const projectProgress = Math.max(
+        0,
+        Math.min(1, (progress - startProgress) / (endProgress - startProgress))
+      );
+
+      gsap.set(p, { y: -projectProgress * moveDistanceNames });
+
+      if (projectProgress > 0 && projectProgress < 1) {
+        gsap.set(p, { color: '#fff' });
+      } else {
+        gsap.set(p, { color: '#4a4a4a' });
+      }
+    });
   }, [totalCount, rtl]);
+
+  useEffect(() => {
+    const tick = () => {
+      onScroll();
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [onScroll]);
 
   return (
     <>
@@ -126,45 +114,52 @@ export default function SpotlightGallery({ items, introText, outroText, rtl = fa
         </section>
       )}
 
-      <section
-        ref={spotlightRef}
-        className="spotlight-section"
-        style={{ padding: '2rem', direction: 'ltr' }}
+      {/* Tall wrapper creates the scroll space; sticky child stays in view */}
+      <div
+        ref={wrapperRef}
+        style={{ height: `${scrollMultiplier * 100}vh`, position: 'relative' }}
+        className="bg-[#141414]"
       >
-        <div className="spotlight-index" style={rtl ? { position: 'absolute', right: '2rem', top: '2rem' } : {}}>
-          <h1 ref={(el) => {
-            (indexRef as any).current = el;
-            if (el && !el.textContent) {
-              const locale = rtl ? 'ar' : 'en';
-              el.textContent = `${localizeNum('01', locale)}/${localizeNum(String(totalCount).padStart(2, '0'), locale)}`;
-            }
-          }} />
-        </div>
-
-        <div ref={imagesContainerRef} className="spotlight-images">
-          {items.map((item, i) => (
-            <div
-              key={i}
-              ref={(el) => { imgRefs.current[i] = el; }}
-              className="spotlight-img"
-            >
-              <img src={item.image} alt={item.name} loading="eager" />
-            </div>
-          ))}
-        </div>
-
         <div
-          ref={namesContainerRef}
-          className="spotlight-names"
-          style={rtl ? { right: 'auto', left: '2rem', alignItems: 'flex-start' } : {}}
+          ref={stickyRef}
+          className="spotlight-section"
+          style={{ position: 'sticky', top: 0, padding: '2rem', direction: 'ltr' }}
         >
-          {items.map((item, i) => (
-            <p key={i} ref={(el) => { nameRefs.current[i] = el; }}>
-              {item.name}
-            </p>
-          ))}
+          <div className="spotlight-index" style={rtl ? { position: 'absolute', right: '2rem', top: '2rem' } : {}}>
+            <h1 ref={(el) => {
+              (indexRef as any).current = el;
+              if (el && !el.textContent) {
+                const locale = rtl ? 'ar' : 'en';
+                el.textContent = `${localizeNum('01', locale)}/${localizeNum(String(totalCount).padStart(2, '0'), locale)}`;
+              }
+            }} />
+          </div>
+
+          <div ref={imagesContainerRef} className="spotlight-images">
+            {items.map((item, i) => (
+              <div
+                key={i}
+                ref={(el) => { imgRefs.current[i] = el; }}
+                className="spotlight-img"
+              >
+                <img src={item.image} alt={item.name} loading="eager" />
+              </div>
+            ))}
+          </div>
+
+          <div
+            ref={namesContainerRef}
+            className="spotlight-names"
+            style={rtl ? { right: 'auto', left: '2rem', alignItems: 'flex-start' } : {}}
+          >
+            {items.map((item, i) => (
+              <p key={i} ref={(el) => { nameRefs.current[i] = el; }}>
+                {item.name}
+              </p>
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
 
       {outroText && (
         <section className="h-screen flex items-center justify-center bg-[#141414]">
