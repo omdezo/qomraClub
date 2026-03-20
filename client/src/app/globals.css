@@ -61,8 +61,7 @@
 
   /* Scoped to CODE5 animation containers only */
   .hero-img img,
-  .about-imgs-col img,
-  .spotlight-img img {
+  .about-imgs-col img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -252,8 +251,16 @@
   width: 100%;
   aspect-ratio: 16/9;
   opacity: 0.5;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+.spotlight-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .spotlight-names {
