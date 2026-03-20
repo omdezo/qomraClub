@@ -1,0 +1,419 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Classic serif font — only for digits, slashes, dots, commas, percent */
+@font-face {
+  font-family: 'ClassicNums';
+  src: url('/fonts/playfair-display-regular.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+002E, U+002C, U+0025, U+002F, U+0660-0669;
+}
+
+@keyframes scrollPulse {
+  0% { transform: translateY(-100%); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@layer base {
+  body {
+    @apply bg-primary text-white;
+    overflow-x: hidden;
+  }
+
+  /* ClassicNums first → renders digits as Playfair Display, everything else falls through to Dialogue Me */
+  .font-dialogue {
+    font-family: 'ClassicNums', var(--font-dialogue), sans-serif;
+  }
+
+  /* Arabic locale: add Noto Sans Arabic for Arabic-Indic digit glyphs (٠-٩) that Playfair doesn't have */
+  [lang="ar"] .font-dialogue {
+    font-family: 'ClassicNums', var(--font-dialogue), var(--font-noto-arabic), sans-serif;
+  }
+
+  ::selection {
+    background: rgba(212, 165, 116, 0.3);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(212, 165, 116, 0.3);
+    border-radius: 2px;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* Scoped to CODE5 animation containers only */
+  .hero-img img,
+  .about-imgs-col img,
+  .spotlight-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ============================================
+   CODE5 — Hero (exact port from Waabi)
+   ============================================ */
+
+/* Every section: full viewport height, relative */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+}
+
+/* The 3 layers: image, header, copy — all absolute, full size */
+.hero-img,
+.hero-header,
+.hero-copy {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity, width, height;
+}
+
+/* Image centered with translate — this stays centered when GSAP shrinks width/height */
+.hero-img {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+/* Header and copy: text sits at bottom-left via flex align-items:flex-end */
+.hero-header,
+.hero-copy {
+  padding: 4rem;
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-header h1 {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+  line-height: 1;
+  width: 75%;
+}
+
+.hero-copy h3 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+  line-height: 1;
+  width: 50%;
+}
+
+/* SplitType words start invisible */
+.hero-copy .word {
+  opacity: 0;
+  display: inline-block;
+}
+
+/* ============================================
+   CODE5 — About / Parallax Columns (exact port)
+   ============================================ */
+
+.about-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 275svh;
+}
+
+.about-images {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  /* Force LTR so columns stay in the same order regardless of document direction */
+  direction: ltr;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4rem;
+}
+
+.about-imgs-col {
+  position: relative;
+  height: 125%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  will-change: transform;
+}
+
+.about-imgs-col .img {
+  width: 125px;
+  height: 125px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Initial offsets — columns start pushed way down */
+.about-imgs-col-1 {
+  transform: translateY(1000px);
+}
+
+.about-imgs-col-2 {
+  transform: translateX(-225px) translateY(500px);
+}
+
+.about-imgs-col-3 {
+  transform: translateX(225px) translateY(500px);
+}
+
+.about-imgs-col-4 {
+  transform: translateY(1000px);
+}
+
+
+/* Center text overlay */
+.about-header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+}
+
+.about-header h3 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+  line-height: 1;
+  color: #fff;
+}
+
+/* ============================================
+   CODE4 — Spotlight Gallery (exact port)
+   ============================================ */
+
+.spotlight-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  padding: 2rem;
+  overflow: hidden;
+  background: #141414;
+}
+
+.spotlight-index h1 {
+  text-transform: uppercase;
+  font-size: clamp(3rem, 5vw, 7rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #fff;
+  will-change: transform;
+}
+
+.spotlight-images {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35%;
+  padding: 50svh 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Counter and names sit above the images */
+.spotlight-index {
+  position: relative;
+  z-index: 1;
+}
+
+.spotlight-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.spotlight-names {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 1;
+}
+
+[dir="rtl"] .spotlight-names {
+  right: auto;
+  left: 2rem;
+  align-items: flex-start;
+}
+
+.spotlight-names p {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #4a4a4a;
+  transition: color 0.3s ease;
+  will-change: transform;
+}
+
+.spotlight-index h1,
+.spotlight-images,
+.spotlight-names p {
+  will-change: transform;
+}
+
+/* ============================================
+   CODE6 — Expanding Grid (exact port from Ingamana)
+   ============================================ */
+
+.expanding-grid {
+  position: relative;
+  width: 100%;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  background: #141414;
+}
+
+.expanding-grid-row {
+  width: 125%;
+  display: flex;
+  gap: 1rem;
+}
+
+.expanding-grid-item {
+  flex: 1;
+  aspect-ratio: 7/5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.expanding-grid-item-img {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.expanding-grid-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.expanding-grid-item-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+}
+
+.expanding-grid-item-info p {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   Outro section
+   ============================================ */
+
+.outro-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.outro-section h3 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+  line-height: 1;
+  width: 35%;
+  color: #fff;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 1000px) {
+  .hero-header,
+  .hero-copy {
+    padding: 2rem;
+  }
+
+  .hero-header h1,
+  .hero-copy h3 {
+    width: 100%;
+  }
+
+  .hero-section {
+    z-index: 2;
+  }
+
+  .about-header,
+  .outro-section h3 {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .about-images {
+    padding: 2rem;
+  }
+
+  .about-imgs-col .img {
+    width: 75px;
+    height: 75px;
+    opacity: 0.25;
+    filter: saturate(0);
+  }
+
+  .about-imgs-col-2,
+  .about-imgs-col-3 {
+    transform: translateX(0px) translateY(500px);
+  }
+
+  .spotlight-images {
+    width: calc(100% - 4rem);
+    gap: 25svh;
+  }
+
+  .spotlight-names p {
+    color: #fff !important;
+  }
+}

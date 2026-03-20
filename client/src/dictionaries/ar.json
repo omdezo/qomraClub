@@ -1,0 +1,124 @@
+{
+  "site": {
+    "name": "قمرة",
+    "tagline": "جماعة التصوير الفوتوغرافي"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "about": "عن قمرة",
+    "gallery": "المعرض",
+    "qomraWeek": "أسبوع قمرة",
+    "events": "الفعاليات",
+    "members": "الأعضاء",
+    "learn": "تعلّم",
+    "services": "الخدمات",
+    "contact": "تواصل معنا",
+    "joinUs": "انضم إلينا"
+  },
+  "home": {
+    "heroTitle": "قمرة",
+    "heroSubtitle": "نلتقط اللحظات، نصنع القصص",
+    "featuredWorks": "أعمال مختارة",
+    "latestEvents": "آخر الفعاليات",
+    "viewAll": "عرض الكل",
+    "joinTitle": "كن جزءاً من الصورة",
+    "joinDescription": "انضم إلى قمرة واكتشف عالم التصوير مع مجتمع من المبدعين",
+    "joinButton": "انضم الآن",
+    "learnTitle": "تعلّم التصوير",
+    "qomraWeekTeaser": "أسبوع قمرة",
+    "exploreEdition": "استكشف"
+  },
+  "about": {
+    "title": "عن قمرة",
+    "whoWeAre": "من نحن",
+    "boardMembers": "مجلس الإدارة",
+    "timeline": "مسيرتنا",
+    "whyJoin": "لماذا تنضم؟",
+    "stats": {
+      "members": "عضو",
+      "qomraWeeks": "أسبوع قمرة",
+      "events": "فعالية",
+      "photos": "صورة"
+    }
+  },
+  "gallery": {
+    "title": "المعرض",
+    "all": "الكل",
+    "portrait": "بورتريه",
+    "landscape": "مناظر طبيعية",
+    "street": "تصوير الشارع",
+    "architecture": "عمارة",
+    "nature": "طبيعة",
+    "abstract": "تجريدي",
+    "loadMore": "تحميل المزيد",
+    "by": "بعدسة"
+  },
+  "qomraWeek": {
+    "title": "أسبوع قمرة",
+    "edition": "الإصدار",
+    "theme": "الموضوع",
+    "participants": "مشارك",
+    "photos": "صورة",
+    "winners": "الفائزون",
+    "judges": "لجنة التحكيم",
+    "photoOf": "صورة",
+    "by": "بعدسة"
+  },
+  "events": {
+    "title": "الفعاليات",
+    "upcoming": "القادمة",
+    "past": "السابقة",
+    "exhibition": "معرض",
+    "workshop": "ورشة عمل",
+    "trip": "رحلة تصوير",
+    "meetup": "لقاء",
+    "competition": "مسابقة",
+    "location": "الموقع"
+  },
+  "learn": {
+    "title": "تعلّم",
+    "tutorial": "درس",
+    "tip": "نصيحة",
+    "review": "مراجعة",
+    "technique": "تقنية",
+    "minRead": "دقائق قراءة",
+    "by": "بقلم"
+  },
+  "services": {
+    "title": "الخدمات",
+    "photography": "تصوير",
+    "videography": "تصوير فيديو",
+    "editing": "تحرير",
+    "design": "تصميم",
+    "eventCoverage": "تغطية فعاليات",
+    "available": "متاح",
+    "busy": "مشغول",
+    "requestService": "طلب الخدمة"
+  },
+  "contact": {
+    "title": "تواصل معنا",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "subject": "الموضوع",
+    "message": "الرسالة",
+    "type": "نوع الرسالة",
+    "general": "استفسار عام",
+    "membership": "عضوية",
+    "serviceRequest": "طلب خدمة",
+    "sponsorship": "رعاية",
+    "send": "إرسال",
+    "success": "تم إرسال رسالتك بنجاح!"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "noResults": "لا توجد نتائج",
+    "back": "رجوع",
+    "readMore": "اقرأ المزيد"
+  },
+  "footer": {
+    "rights": "جميع الحقوق محفوظة",
+    "university": "جامعة"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "site": {
+    "name": "Qomra",
+    "tagline": "Photography Club"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "gallery": "Gallery",
+    "qomraWeek": "Qomra Week",
+    "events": "Events",
+    "members": "Members",
+    "learn": "Learn",
+    "services": "Services",
+    "contact": "Contact",
+    "joinUs": "Join Us"
+  },
+  "home": {
+    "heroTitle": "Qomra",
+    "heroSubtitle": "We capture moments, we craft stories",
+    "featuredWorks": "Featured Works",
+    "latestEvents": "Latest Events",
+    "viewAll": "View All",
+    "joinTitle": "Be Part of the Frame",
+    "joinDescription": "Join Qomra and discover the world of photography with a community of creators",
+    "joinButton": "Join Now",
+    "learnTitle": "Learn Photography",
+    "qomraWeekTeaser": "Qomra Week",
+    "exploreEdition": "Explore"
+  },
+  "about": {
+    "title": "About Qomra",
+    "whoWeAre": "Who We Are",
+    "boardMembers": "Board Members",
+    "timeline": "Our Journey",
+    "whyJoin": "Why Join?",
+    "stats": {
+      "members": "Members",
+      "qomraWeeks": "Qomra Weeks",
+      "events": "Events",
+      "photos": "Photos"
+    }
+  },
+  "gallery": {
+    "title": "Gallery",
+    "all": "All",
+    "portrait": "Portrait",
+    "landscape": "Landscape",
+    "street": "Street",
+    "architecture": "Architecture",
+    "nature": "Nature",
+    "abstract": "Abstract",
+    "loadMore": "Load More",
+    "by": "By"
+  },
+  "qomraWeek": {
+    "title": "Qomra Week",
+    "edition": "Edition",
+    "theme": "Theme",
+    "participants": "Participants",
+    "photos": "Photos",
+    "winners": "Winners",
+    "judges": "Judges",
+    "photoOf": "Photo",
+    "by": "By"
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "exhibition": "Exhibition",
+    "workshop": "Workshop",
+    "trip": "Photography Trip",
+    "meetup": "Meetup",
+    "competition": "Competition",
+    "location": "Location"
+  },
+  "learn": {
+    "title": "Learn",
+    "tutorial": "Tutorial",
+    "tip": "Tip",
+    "review": "Review",
+    "technique": "Technique",
+    "minRead": "min read",
+    "by": "By"
+  },
+  "services": {
+    "title": "Services",
+    "photography": "Photography",
+    "videography": "Videography",
+    "editing": "Editing",
+    "design": "Design",
+    "eventCoverage": "Event Coverage",
+    "available": "Available",
+    "busy": "Busy",
+    "requestService": "Request Service"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "subject": "Subject",
+    "message": "Message",
+    "type": "Message Type",
+    "general": "General Inquiry",
+    "membership": "Membership",
+    "serviceRequest": "Service Request",
+    "sponsorship": "Sponsorship",
+    "send": "Send",
+    "success": "Your message has been sent successfully!"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "noResults": "No results found",
+    "back": "Back",
+    "readMore": "Read More"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "university": "University"
+  }
+}
