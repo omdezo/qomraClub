@@ -1,14 +1,8 @@
 [
   {
-    "_id": "fallback-settings",
     "siteName": { "ar": "قمرة", "en": "Qomra" },
     "tagline": { "ar": "جماعة التصوير الفوتوغرافي", "en": "Photography Club" },
-    "contactEmail": "contact@qomra.com",
-    "socialLinks": {
-      "instagram": "",
-      "twitter": "",
-      "youtube": "",
-      "tiktok": ""
-    }
+    "socialLinks": { "instagram": "", "twitter": "", "youtube": "", "tiktok": "" },
+    "contactInfo": { "email": "contact@qomra.com", "phone": "", "university": { "ar": "", "en": "" } }
   }
 ]
