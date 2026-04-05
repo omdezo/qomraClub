@@ -1,0 +1,225 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  role         String   @default("editor") // superadmin | admin | editor
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+model GalleryItem {
+  id                 String   @id @default(cuid())
+  image              String
+  cloudinaryPublicId String   @default("")
+  name               Json     @default("{}") // { ar, en }
+  year               Int      @default(2024)
+  section            String   // spotlight | grid | hero-preview
+  sortOrder          Int      @default(0)
+  isPublished        Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([section, isPublished, sortOrder])
+  @@map("gallery_items")
+}
+
+model HomepageSection {
+  id        String   @id @default(cuid())
+  section   String   @unique // hero | parallax | qomraWeek | featured | events | joinCta
+  enabled   Boolean  @default(true)
+  data      Json     @default("{}")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("homepage_sections")
+}
+
+model SiteSettings {
+  id               String   @id @default(cuid())
+  siteName         Json     @default("{\"ar\":\"قمرة\",\"en\":\"Qomra\"}")
+  tagline          Json     @default("{}")
+  aboutText        Json     @default("{}")
+  mission          Json     @default("{}")
+  logoUrl          String   @default("")
+  heroImageUrl     String   @default("")
+  socialLinks      Json     @default("{}")
+  contactInfo      Json     @default("{}")
+  announcementBar  Json     @default("{}")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+model Event {
+  id             String   @id @default(cuid())
+  title          Json     @default("{}")
+  slug           Json     @default("{}")
+  description    Json     @default("{}")
+  content        Json     @default("{}")
+  type           String   @default("meetup")
+  coverImageUrl  String   @default("")
+  galleryImages  String[] @default([])
+  date           DateTime
+  location       Json     @default("{}")
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([isPublished, date])
+  @@map("events")
+}
+
+model Member {
+  id             String   @id @default(cuid())
+  name           Json     @default("{}")
+  role           Json     @default("{}")
+  bio            Json     @default("{}")
+  avatarUrl      String   @default("")
+  specialties    String[] @default([])
+  socialLinks    Json     @default("{}")
+  isBoardMember  Boolean  @default(false)
+  boardPosition  Int      @default(0)
+  sortOrder      Int      @default(0)
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  services Service[]
+
+  @@map("members")
+}
+
+model Service {
+  id              String   @id @default(cuid())
+  memberId        String?
+  member          Member?  @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  title           Json     @default("{}")
+  description     Json     @default("{}")
+  category        String   @default("photography")
+  portfolioImages String[] @default([])
+  priceRange      Json     @default("{}")
+  contactEmail    String   @default("")
+  isAvailable     Boolean  @default(true)
+  isPublished     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("services")
+}
+
+model Article {
+  id            String   @id @default(cuid())
+  title         Json     @default("{}")
+  slug          Json     @default("{}")
+  content       Json     @default("{}")
+  excerpt       Json     @default("{}")
+  authorId      String?
+  coverImageUrl String   @default("")
+  category      String   @default("tutorial")
+  tags          String[] @default([])
+  readTime      Int      @default(5)
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("articles")
+}
+
+model Photo {
+  id                 String   @id @default(cuid())
+  title              Json     @default("{}")
+  description        Json     @default("{}")
+  photographerName   Json     @default("{}")
+  imageUrl           String
+  thumbnailUrl       String   @default("")
+  blurDataUrl        String   @default("")
+  cloudinaryPublicId String
+  width              Int      @default(0)
+  height             Int      @default(0)
+  category           String   @default("general")
+  tags               String[] @default([])
+  featured           Boolean  @default(false)
+  sortOrder          Int      @default(0)
+  isPublished        Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("photos")
+}
+
+model QomraWeekEdition {
+  id                String             @id @default(cuid())
+  editionNumber     Int                @unique
+  title             Json               @default("{}")
+  theme             Json               @default("{}")
+  description       Json               @default("{}")
+  year              Int
+  startDate         DateTime?
+  endDate           DateTime?
+  coverImageUrl     String             @default("")
+  totalParticipants Int                @default(0)
+  totalPhotos       Int                @default(0)
+  winners           Json               @default("[]")
+  judges            Json               @default("[]")
+  isCurrent         Boolean            @default(false)
+  isPublished       Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  photos            QomraWeekPhoto[]
+
+  @@map("qomra_week_editions")
+}
+
+model QomraWeekPhoto {
+  id                 String             @id @default(cuid())
+  editionId          String
+  edition            QomraWeekEdition   @relation(fields: [editionId], references: [id], onDelete: Cascade)
+  editionNumber      Int
+  title              Json               @default("{}")
+  photographerName   Json               @default("{}")
+  imageUrl           String
+  thumbnailUrl       String             @default("")
+  blurDataUrl        String             @default("")
+  cloudinaryPublicId String             @default("")
+  width              Int                @default(0)
+  height             Int                @default(0)
+  isWinner           Boolean            @default(false)
+  winnerPlace        Int                @default(0)
+  sortOrder          Int                @default(0)
+  isPublished        Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@map("qomra_week_photos")
+}
+
+model ContactMessage {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String   @default("")
+  subject    String
+  message    String
+  type       String   @default("general")
+  isRead     Boolean  @default(false)
+  isArchived Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("contact_messages")
+}

@@ -1,3 +1,4 @@
+import 'express-async-errors';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -48,8 +49,31 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Error handler
-app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+// Graceful DB-error handler — GET requests get empty results, others get 503
+app.use((err: Error & { name?: string }, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  const isDbError =
+    err.name === 'MongooseServerSelectionError' ||
+    err.name === 'MongoNetworkError' ||
+    err.name === 'MongoTimeoutError' ||
+    err.message?.includes('buffering timed out') ||
+    err.message?.includes('ECONNREFUSED') ||
+    err.message?.includes('topology was destroyed');
+
+  if (isDbError) {
+    console.error('DB unavailable:', err.message);
+    if (req.method === 'GET') {
+      // Return safe empty data for read requests
+      if (req.path.includes('/upcoming') || req.path.includes('list')) {
+        res.json([]);
+        return;
+      }
+      res.json(req.path.match(/\/[a-f0-9]{24}$|\/admin\//) ? {} : { data: [], total: 0, page: 1, totalPages: 0 });
+      return;
+    }
+    res.status(503).json({ message: 'Service temporarily unavailable' });
+    return;
+  }
+
   console.error(err.stack);
   res.status(500).json({ message: err.message || 'Internal server error' });
 });

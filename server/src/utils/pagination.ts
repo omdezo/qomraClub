@@ -1,9 +1,6 @@
-import { Query } from 'mongoose';
-
 export interface PaginationOptions {
   page?: number;
   limit?: number;
-  sort?: string;
 }
 
 export interface PaginatedResult<T> {
@@ -16,20 +13,32 @@ export interface PaginatedResult<T> {
   };
 }
 
+/**
+ * Prisma-friendly paginate helper.
+ * Pass a model delegate + where/orderBy/include, returns data + pagination.
+ */
 export const paginate = async <T>(
-  query: Query<T[], T>,
+  model: {
+    findMany: (args: any) => Promise<T[]>;
+    count: (args: any) => Promise<number>;
+  },
+  args: { where?: any; orderBy?: any; include?: any; select?: any },
   options: PaginationOptions
 ): Promise<PaginatedResult<T>> => {
   const page = Math.max(1, options.page || 1);
   const limit = Math.min(100, Math.max(1, options.limit || 20));
-  const sort = options.sort || '-createdAt';
 
-  const total = await query.model.countDocuments(query.getFilter());
-  const data = await query
-    .sort(sort)
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .exec();
+  const [total, data] = await Promise.all([
+    model.count({ where: args.where }),
+    model.findMany({
+      where: args.where,
+      orderBy: args.orderBy,
+      include: args.include,
+      select: args.select,
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+  ]);
 
   return {
     data,

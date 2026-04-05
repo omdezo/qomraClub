@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
-import { AdminUser } from '../models/AdminUser';
+import { prisma } from '../lib/prisma';
 
 export interface AuthRequest extends Request {
   user?: { id: string; role: string };
@@ -19,12 +19,15 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
   try {
     const decoded = jwt.verify(token, env.jwtSecret) as { id: string };
-    const user = await AdminUser.findById(decoded.id).select('-passwordHash');
+    const user = await prisma.adminUser.findUnique({
+      where: { id: decoded.id },
+      select: { id: true, role: true },
+    });
     if (!user) {
       res.status(401).json({ message: 'Not authorized' });
       return;
     }
-    req.user = { id: user._id.toString(), role: user.role };
+    req.user = { id: user.id, role: user.role };
     next();
   } catch {
     res.status(401).json({ message: 'Not authorized' });

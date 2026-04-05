@@ -1,24 +1,40 @@
 import app from './app';
-import { connectDB } from './config/db';
 import { env } from './config/env';
-import { AdminUser } from './models/AdminUser';
+import { prisma, checkDbConnection } from './lib/prisma';
+import bcrypt from 'bcryptjs';
+
+process.on('unhandledRejection', (reason: any) => {
+  console.warn('Unhandled rejection (continuing):', reason?.message || reason);
+});
 
 const seedAdmin = async () => {
-  const count = await AdminUser.countDocuments();
-  if (count === 0) {
-    await AdminUser.create({
-      username: 'admin',
-      email: 'admin@qomra.com',
-      passwordHash: 'admin123',
-      role: 'superadmin',
-    });
-    console.log('Default admin created: admin@qomra.com / admin123');
+  try {
+    const count = await prisma.adminUser.count();
+    if (count === 0) {
+      const hash = await bcrypt.hash('admin123', 12);
+      await prisma.adminUser.create({
+        data: {
+          username: 'admin',
+          email: 'admin@qomra.com',
+          passwordHash: hash,
+          role: 'superadmin',
+        },
+      });
+      console.log('Default admin created: admin@qomra.com / admin123');
+    }
+  } catch (err) {
+    console.warn('Admin seed skipped:', (err as Error).message);
   }
 };
 
 const start = async () => {
-  await connectDB();
-  await seedAdmin();
+  const dbOk = await checkDbConnection();
+  if (dbOk) {
+    console.log('PostgreSQL connected');
+    await seedAdmin();
+  } else {
+    console.warn('⚠ DB unavailable — server will use JSON fallback');
+  }
 
   app.listen(env.port, () => {
     console.log(`Server running on port ${env.port}`);

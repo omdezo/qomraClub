@@ -1,0 +1,152 @@
+[
+  {
+    "_id": "fallback-hero",
+    "section": "hero",
+    "enabled": true,
+    "sortOrder": 0,
+    "data": {
+      "heroImage": "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?auto=format&fit=crop&w=1600&q=80",
+      "heroTitle": {
+        "ar": "قمرة — حيث تتحول اللحظات إلى فن خالد",
+        "en": "Qomra — Where moments become timeless art"
+      },
+      "heroSubtitle": {
+        "ar": "جماعة التصوير الفوتوغرافي — نلتقط ما لا يُرى ونروي ما لا يُقال",
+        "en": "The photography collective — we capture the unseen and tell the untold"
+      }
+    }
+  },
+  {
+    "_id": "fallback-parallax",
+    "section": "parallax",
+    "enabled": true,
+    "sortOrder": 1,
+    "data": {
+      "parallaxImages": [
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1518173946687-a243cf1c8c8e?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1520962922320-2038eebab146?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80"
+      ],
+      "parallaxText": {
+        "ar": "لحظات من الحركة والأجواء تجتمع في مجموعة هادئة من اللقطات البصرية",
+        "en": "Fragments of motion and atmosphere gathered into a drifting collection of quiet visual moments"
+      }
+    }
+  },
+  {
+    "_id": "fallback-qomra-week",
+    "section": "qomraWeek",
+    "enabled": true,
+    "sortOrder": 2,
+    "data": {
+      "editionNumber": 11,
+      "editionTitle": {
+        "ar": "أسبوع قمرة",
+        "en": "Qomra Week"
+      },
+      "editionDescription": {
+        "ar": "المسابقة السنوية الأبرز لجماعة قمرة في التصوير الفوتوغرافي",
+        "en": "The flagship annual photography competition by Qomra Club"
+      },
+      "editionCoverImages": [
+        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1518173946687-a243cf1c8c8e?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520962922320-2038eebab146?auto=format&fit=crop&w=600&q=80"
+      ],
+      "previewImages": [
+        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1518173946687-a243cf1c8c8e?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1520962922320-2038eebab146?auto=format&fit=crop&w=600&q=80"
+      ]
+    }
+  },
+  {
+    "_id": "fallback-featured",
+    "section": "featured",
+    "enabled": true,
+    "sortOrder": 3,
+    "data": {
+      "featuredWorks": [
+        {
+          "image": "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "دراسة الضوء", "en": "Light Study" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "صمت المكان", "en": "Silent Space" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "أفق بعيد", "en": "Distant Horizon" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "ظلال الشارع", "en": "Street Shadows" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "لحظة عابرة", "en": "Fleeting Moment" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "بورتريه الروح", "en": "Soul Portrait" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "انعكاسات", "en": "Reflections" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        },
+        {
+          "image": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1200&q=80",
+          "title": { "ar": "مسار الغيوم", "en": "Cloud Path" },
+          "photographer": { "ar": "مصور قمرة", "en": "Qomra Photographer" }
+        }
+      ]
+    }
+  },
+  {
+    "_id": "fallback-events",
+    "section": "events",
+    "enabled": true,
+    "sortOrder": 4
+  },
+  {
+    "_id": "fallback-join-cta",
+    "section": "joinCta",
+    "enabled": true,
+    "sortOrder": 5,
+    "data": {
+      "ctaTitle": {
+        "ar": "كن جزءاً من الصورة",
+        "en": "Be part of the frame"
+      },
+      "ctaDescription": {
+        "ar": "انضم إلى مجتمع قمرة واكتشف فن التصوير مع مبدعين يشاركونك الشغف",
+        "en": "Join the Qomra community and discover photography with creators who share your passion"
+      },
+      "ctaButtonText": {
+        "ar": "تواصل معنا",
+        "en": "Get in Touch"
+      }
+    }
+  }
+]

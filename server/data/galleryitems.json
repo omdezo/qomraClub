@@ -1,0 +1,263 @@
+[
+  {
+    "_id": "fallback-hero-1",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80",
+    "name": { "ar": "معاينة 1", "en": "Preview 1" },
+    "year": 2024,
+    "section": "hero-preview",
+    "sortOrder": 0,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-hero-2",
+    "image": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    "name": { "ar": "معاينة 2", "en": "Preview 2" },
+    "year": 2024,
+    "section": "hero-preview",
+    "sortOrder": 1,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-hero-3",
+    "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
+    "name": { "ar": "معاينة 3", "en": "Preview 3" },
+    "year": 2024,
+    "section": "hero-preview",
+    "sortOrder": 2,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-1",
+    "image": "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "دراسة الضوء", "en": "Light Study" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 0,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-2",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "صمت المكان", "en": "Silent Space" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 1,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-3",
+    "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "أفق بعيد", "en": "Distant Horizon" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 2,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-4",
+    "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "ظلال الشارع", "en": "Street Shadows" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 3,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-5",
+    "image": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "لحظة عابرة", "en": "Fleeting Moment" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 4,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-6",
+    "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "بورتريه الروح", "en": "Soul Portrait" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 5,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-7",
+    "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "انعكاسات", "en": "Reflections" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 6,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-8",
+    "image": "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "مسار الغيوم", "en": "Cloud Path" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 7,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-9",
+    "image": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "وقت الذهب", "en": "Golden Hour" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 8,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-spot-10",
+    "image": "https://images.unsplash.com/photo-1465056836900-8f1e940b3fc8?auto=format&fit=crop&w=1200&q=80",
+    "name": { "ar": "نهاية الطريق", "en": "Road End" },
+    "year": 2024,
+    "section": "spotlight",
+    "sortOrder": 9,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-1",
+    "image": "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "ملاحظات ميدانية", "en": "Fieldnotes" },
+    "year": 2020,
+    "section": "grid",
+    "sortOrder": 0,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-2",
+    "image": "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "الخط الأحمر", "en": "Redline" },
+    "year": 2021,
+    "section": "grid",
+    "sortOrder": 1,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-3",
+    "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "جولة المعرض", "en": "Gallery Walk" },
+    "year": 2019,
+    "section": "grid",
+    "sortOrder": 2,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-4",
+    "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "بروفايل جانبي", "en": "Side Profile" },
+    "year": 2022,
+    "section": "grid",
+    "sortOrder": 3,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-5",
+    "image": "https://images.unsplash.com/photo-1470770841497-74b4aaeed3d5?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "مايك مفتوح", "en": "Open Mic" },
+    "year": 2023,
+    "section": "grid",
+    "sortOrder": 4,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-6",
+    "image": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "اللوح الخلفي", "en": "Backboard" },
+    "year": 2024,
+    "section": "grid",
+    "sortOrder": 5,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-7",
+    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "وهج ما بعد", "en": "Afterglow" },
+    "year": 2021,
+    "section": "grid",
+    "sortOrder": 6,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-8",
+    "image": "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "بيت التل", "en": "Hill House" },
+    "year": 2020,
+    "section": "grid",
+    "sortOrder": 7,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-9",
+    "image": "https://images.unsplash.com/photo-1505144808419-1957a94ca61e?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "جزر منخفض", "en": "Low Tide" },
+    "year": 2018,
+    "section": "grid",
+    "sortOrder": 8,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-10",
+    "image": "https://images.unsplash.com/photo-1476231682828-37e571bc172f?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "ساعة الزمن", "en": "Timepiece" },
+    "year": 2019,
+    "section": "grid",
+    "sortOrder": 9,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-11",
+    "image": "https://images.unsplash.com/photo-1439853949127-fa647821eba0?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "تركيز قريب", "en": "Close Focus" },
+    "year": 2022,
+    "section": "grid",
+    "sortOrder": 10,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-12",
+    "image": "https://images.unsplash.com/photo-1414609245224-afa02bfb3fda?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "هيكل طائرة", "en": "Airframe" },
+    "year": 2023,
+    "section": "grid",
+    "sortOrder": 11,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-13",
+    "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "حافظة صلبة", "en": "Hardcase" },
+    "year": 2024,
+    "section": "grid",
+    "sortOrder": 12,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-14",
+    "image": "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "أحمر عميق", "en": "Deep Red" },
+    "year": 2021,
+    "section": "grid",
+    "sortOrder": 13,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-15",
+    "image": "https://images.unsplash.com/photo-1465056836900-8f1e940b3fc8?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "مسار سريع", "en": "Fast Track" },
+    "year": 2022,
+    "section": "grid",
+    "sortOrder": 14,
+    "isPublished": true
+  },
+  {
+    "_id": "fallback-grid-16",
+    "image": "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?auto=format&fit=crop&w=600&q=80",
+    "name": { "ar": "نوبة ليلية", "en": "Night Shift" },
+    "year": 2025,
+    "section": "grid",
+    "sortOrder": 15,
+    "isPublished": true
+  }
+]

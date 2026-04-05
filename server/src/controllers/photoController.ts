@@ -1,93 +1,74 @@
 import { Request, Response } from 'express';
-import { Photo } from '../models/Photo';
+import { prisma } from '../lib/prisma';
 import { paginate } from '../utils/pagination';
 
 export const getPhotos = async (req: Request, res: Response): Promise<void> => {
   const { category, featured, search } = req.query;
-  const filter: any = { isPublished: true };
-
-  if (category) filter.category = category;
-  if (featured === 'true') filter.featured = true;
+  const where: any = { isPublished: true };
+  if (category) where.category = category;
+  if (featured === 'true') where.featured = true;
   if (search) {
-    filter.$or = [
-      { 'title.ar': { $regex: search, $options: 'i' } },
-      { 'title.en': { $regex: search, $options: 'i' } },
-      { 'photographerName.ar': { $regex: search, $options: 'i' } },
-      { 'photographerName.en': { $regex: search, $options: 'i' } },
+    const q = search as string;
+    where.OR = [
+      { title: { path: ['ar'], string_contains: q } },
+      { title: { path: ['en'], string_contains: q } },
+      { photographerName: { path: ['ar'], string_contains: q } },
+      { photographerName: { path: ['en'], string_contains: q } },
     ];
   }
 
-  const result = await paginate(Photo.find(filter), {
-    page: Number(req.query.page) || 1,
-    limit: Number(req.query.limit) || 20,
-    sort: req.query.sort as string || 'sortOrder',
-  });
-
+  const result = await paginate(
+    prisma.photo,
+    { where, orderBy: { sortOrder: 'asc' } },
+    { page: Number(req.query.page) || 1, limit: Number(req.query.limit) || 20 }
+  );
   res.json(result);
 };
 
 export const getPhoto = async (req: Request, res: Response): Promise<void> => {
-  const photo = await Photo.findById(req.params.id);
-  if (!photo) {
-    res.status(404).json({ message: 'Photo not found' });
-    return;
-  }
+  const photo = await prisma.photo.findUnique({ where: { id: req.params.id as string } });
+  if (!photo) { res.status(404).json({ message: 'Photo not found' }); return; }
   res.json(photo);
 };
 
 export const createPhoto = async (req: Request, res: Response): Promise<void> => {
-  const photo = await Photo.create(req.body);
+  const photo = await prisma.photo.create({ data: req.body });
   res.status(201).json(photo);
 };
 
 export const updatePhoto = async (req: Request, res: Response): Promise<void> => {
-  const photo = await Photo.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!photo) {
-    res.status(404).json({ message: 'Photo not found' });
-    return;
-  }
-  res.json(photo);
+  try {
+    const photo = await prisma.photo.update({ where: { id: req.params.id as string }, data: req.body });
+    res.json(photo);
+  } catch { res.status(404).json({ message: 'Photo not found' }); }
 };
 
 export const deletePhoto = async (req: Request, res: Response): Promise<void> => {
-  const photo = await Photo.findByIdAndDelete(req.params.id);
-  if (!photo) {
-    res.status(404).json({ message: 'Photo not found' });
-    return;
-  }
-  res.json({ message: 'Photo deleted' });
+  try {
+    await prisma.photo.delete({ where: { id: req.params.id as string } });
+    res.json({ message: 'Photo deleted' });
+  } catch { res.status(404).json({ message: 'Photo not found' }); }
 };
 
 export const reorderPhotos = async (req: Request, res: Response): Promise<void> => {
-  const { orders } = req.body; // [{ id, sortOrder }]
-  const bulkOps = orders.map((item: { id: string; sortOrder: number }) => ({
-    updateOne: {
-      filter: { _id: item.id },
-      update: { sortOrder: item.sortOrder },
-    },
-  }));
-  await Photo.bulkWrite(bulkOps);
+  const { orders } = req.body;
+  await prisma.$transaction(
+    orders.map((item: { id: string; sortOrder: number }) =>
+      prisma.photo.update({ where: { id: item.id }, data: { sortOrder: item.sortOrder } })
+    )
+  );
   res.json({ message: 'Reordered' });
 };
 
-// Admin: get all photos including unpublished
 export const adminGetPhotos = async (req: Request, res: Response): Promise<void> => {
-  const { category, search } = req.query;
-  const filter: any = {};
+  const { category } = req.query;
+  const where: any = {};
+  if (category) where.category = category;
 
-  if (category) filter.category = category;
-  if (search) {
-    filter.$or = [
-      { 'title.ar': { $regex: search, $options: 'i' } },
-      { 'title.en': { $regex: search, $options: 'i' } },
-    ];
-  }
-
-  const result = await paginate(Photo.find(filter), {
-    page: Number(req.query.page) || 1,
-    limit: Number(req.query.limit) || 50,
-    sort: 'sortOrder',
-  });
-
+  const result = await paginate(
+    prisma.photo,
+    { where, orderBy: { sortOrder: 'asc' } },
+    { page: Number(req.query.page) || 1, limit: Number(req.query.limit) || 50 }
+  );
   res.json(result);
 };

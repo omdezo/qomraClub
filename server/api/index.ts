@@ -1,34 +1,44 @@
-import mongoose from 'mongoose';
 import app from '../src/app';
-import { env } from '../src/config/env';
-import { AdminUser } from '../src/models/AdminUser';
+import { prisma, checkDbConnection } from '../src/lib/prisma';
+import bcrypt from 'bcryptjs';
 
-// Cache DB connection across warm invocations
 let isConnected = false;
+let lastAttempt = 0;
+const RETRY_INTERVAL = 30_000;
 
 async function ensureConnection() {
-  if (isConnected && mongoose.connection.readyState === 1) return;
-  await mongoose.connect(env.mongodbUri);
-  console.log('MongoDB connected (serverless)');
-  const count = await AdminUser.countDocuments();
-  if (count === 0) {
-    await AdminUser.create({
-      username: 'admin',
-      email: 'admin@qomra.com',
-      passwordHash: 'admin123',
-      role: 'superadmin',
-    });
+  if (isConnected) return;
+  const now = Date.now();
+  if (now - lastAttempt < RETRY_INTERVAL) return;
+  lastAttempt = now;
+
+  const ok = await checkDbConnection();
+  if (!ok) {
+    console.warn('DB unreachable — using JSON fallback');
+    return;
   }
   isConnected = true;
+
+  // Seed admin on first successful connection
+  try {
+    const count = await prisma.adminUser.count();
+    if (count === 0) {
+      const hash = await bcrypt.hash('admin123', 12);
+      await prisma.adminUser.create({
+        data: {
+          username: 'admin',
+          email: 'admin@qomra.com',
+          passwordHash: hash,
+          role: 'superadmin',
+        },
+      });
+    }
+  } catch (err) {
+    console.error('Admin seed failed:', (err as Error).message);
+  }
 }
 
 export default async function handler(req: any, res: any) {
-  try {
-    await ensureConnection();
-  } catch (err) {
-    console.error('DB connection failed:', err);
-    res.status(500).json({ error: 'Database connection failed' });
-    return;
-  }
+  await ensureConnection();
   return app(req, res);
 }
