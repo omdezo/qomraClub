@@ -26,7 +26,7 @@ jobs:
       - name: Export DB to JSON
         working-directory: server
         env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run backup
 
       - name: Commit backup if changed
