@@ -9,7 +9,8 @@ import {
   HiOutlinePhotograph, HiOutlineUserGroup, HiOutlineCalendar,
   HiOutlineStar, HiOutlineBookOpen, HiOutlineBriefcase,
   HiOutlineMail, HiOutlineCog, HiOutlineChartBar, HiOutlineLogout,
-  HiOutlineHome,
+  HiOutlineHome, HiOutlineAcademicCap, HiOutlineSparkles,
+  HiOutlineChatAlt2, HiOutlineOfficeBuilding,
   HiMenu, HiX,
 } from 'react-icons/hi';
 
@@ -20,6 +21,10 @@ const navItems = [
   { href: '/admin/qomra-week', label: 'Qomra Week', icon: HiOutlineStar },
   { href: '/admin/events', label: 'Events', icon: HiOutlineCalendar },
   { href: '/admin/members', label: 'Members', icon: HiOutlineUserGroup },
+  { href: '/admin/alumni', label: 'Alumni', icon: HiOutlineAcademicCap },
+  { href: '/admin/titles', label: 'Titles', icon: HiOutlineSparkles },
+  { href: '/admin/testimonials', label: 'Testimonials', icon: HiOutlineChatAlt2 },
+  { href: '/admin/partners', label: 'Partners', icon: HiOutlineOfficeBuilding },
   { href: '/admin/learn', label: 'Articles', icon: HiOutlineBookOpen },
   { href: '/admin/services', label: 'Services', icon: HiOutlineBriefcase },
   { href: '/admin/contact', label: 'Messages', icon: HiOutlineMail },

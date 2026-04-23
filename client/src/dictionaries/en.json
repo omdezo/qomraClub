@@ -10,7 +10,9 @@
     "qomraWeek": "Qomra Week",
     "events": "Events",
     "members": "Members",
-    "learn": "Learn",
+    "alumni": "Alumni",
+    "titles": "Titles",
+    "learn": "Articles",
     "services": "Services",
     "contact": "Contact",
     "joinUs": "Join Us"
@@ -91,9 +93,36 @@
     "editing": "Editing",
     "design": "Design",
     "eventCoverage": "Event Coverage",
+    "photoPrinting": "Photo Printing",
+    "privateUpload": "Private Photo Upload",
+    "photoBooth": "Photo Booth",
     "available": "Available",
     "busy": "Busy",
     "requestService": "Request Service"
+  },
+  "alumni": {
+    "title": "Qomra Alumni",
+    "subtitle": "The pride of our journey — talents that carry our legacy",
+    "description": "Former Qomra members who left their mark and carried their achievements beyond the walls of the university",
+    "graduatedIn": "Graduated in",
+    "currentRole": "Current Role",
+    "achievements": "Achievements",
+    "major": "Major"
+  },
+  "titles": {
+    "title": "Qomra Titles",
+    "subtitle": "The title system that honors members' achievements",
+    "description": "The title system crafted by Qomra aims to honor the achievements of team members from the moment they join the club until graduation. Each title comes with its own set of requirements that members must fulfill to earn it.",
+    "requirements": "Requirements",
+    "tier": "Tier"
+  },
+  "testimonials": {
+    "title": "What They Said",
+    "subtitle": "Words from people who have touched our journey"
+  },
+  "partners": {
+    "title": "Our Partners",
+    "subtitle": "Those who stood by us in our journey"
   },
   "contact": {
     "title": "Contact Us",

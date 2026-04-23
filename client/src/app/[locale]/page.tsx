@@ -10,6 +10,10 @@ import HomeQomraWeek from '@/components/home/HomeQomraWeek';
 import HomeFeatured from '@/components/home/HomeFeatured';
 import HomeEvents from '@/components/home/HomeEvents';
 import HomeJoin from '@/components/home/HomeJoin';
+import HomeTestimonials from '@/components/home/HomeTestimonials';
+import HomePartners from '@/components/home/HomePartners';
+import arDict from '@/dictionaries/ar.json';
+import enDict from '@/dictionaries/en.json';
 
 interface Section {
   section: string;
@@ -20,6 +24,7 @@ interface Section {
 export default function HomePage() {
   const params = useParams();
   const locale = (params?.locale as Locale) || 'ar';
+  const dict = locale === 'ar' ? arDict : enDict;
   const [sections, setSections] = useState<Section[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -77,6 +82,12 @@ export default function HomePage() {
       {(!loaded || events?.enabled !== false) && (
         <HomeEvents locale={locale} />
       )}
+
+      {/* Testimonials — قالوا عنا */}
+      <HomeTestimonials locale={locale} dict={dict} />
+
+      {/* Partners — شركاء النجاح */}
+      <HomePartners locale={locale} dict={dict} />
 
       {/* Join CTA */}
       {(!loaded || joinCta?.enabled !== false) && (

@@ -223,3 +223,72 @@ model ContactMessage {
 
   @@map("contact_messages")
 }
+
+model Alumni {
+  id            String   @id @default(cuid())
+  name          Json     @default("{}") // { ar, en }
+  graduationYear Int
+  major         Json     @default("{}") // { ar, en } - University major
+  currentRole   Json     @default("{}") // { ar, en } - Current job/role
+  bio           Json     @default("{}")
+  avatarUrl     String   @default("")
+  title         String   @default("") // e.g. "فخر قمرة", "مجيد قمرة"
+  socialLinks   Json     @default("{}")
+  achievements  Json     @default("[]")
+  sortOrder     Int      @default(0)
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([isPublished, sortOrder])
+  @@map("alumni")
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        Json     @default("{}") // { ar, en }
+  role        Json     @default("{}") // { ar, en } - their position/relationship
+  quote       Json     @default("{}") // { ar, en } - the testimonial itself
+  avatarUrl   String   @default("")
+  organization Json    @default("{}") // { ar, en } - optional organization
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished, sortOrder])
+  @@map("testimonials")
+}
+
+model Partner {
+  id          String   @id @default(cuid())
+  name        Json     @default("{}") // { ar, en }
+  logoUrl     String
+  websiteUrl  String   @default("")
+  description Json     @default("{}") // { ar, en }
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished, sortOrder])
+  @@map("partners")
+}
+
+model Title {
+  id           String   @id @default(cuid())
+  slug         String   @unique // e.g. "member", "photographer", "designer"
+  name         Json     @default("{}") // { ar, en } - e.g. "عضو قمرة" / "Qomra Member"
+  description  Json     @default("{}") // { ar, en } - what the title means
+  requirements Json     @default("[]") // [{ ar, en }] - list of requirements to earn it
+  iconUrl      String   @default("") // Optional icon/badge
+  color        String   @default("#d4a574") // Accent color for the title
+  tier         Int      @default(1) // 1-6, progression level
+  sortOrder    Int      @default(0)
+  isPublished  Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isPublished, tier])
+  @@map("titles")
+}

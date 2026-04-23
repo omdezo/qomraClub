@@ -18,6 +18,8 @@ const navItems = [
   { key: 'gallery', href: '/gallery' },
   { key: 'qomraWeek', href: '/qomra-week' },
   { key: 'events', href: '/events' },
+  { key: 'alumni', href: '/alumni' },
+  { key: 'titles', href: '/titles' },
   { key: 'learn', href: '/learn' },
   { key: 'services', href: '/services' },
   { key: 'contact', href: '/contact' },

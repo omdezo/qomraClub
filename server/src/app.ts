@@ -17,6 +17,10 @@ import uploadRoutes from './routes/uploadRoutes';
 import statsRoutes from './routes/statsRoutes';
 import galleryItemRoutes from './routes/galleryItemRoutes';
 import homepageRoutes from './routes/homepageRoutes';
+import alumniRoutes from './routes/alumniRoutes';
+import testimonialRoutes from './routes/testimonialRoutes';
+import partnerRoutes from './routes/partnerRoutes';
+import titleRoutes from './routes/titleRoutes';
 
 const app = express();
 
@@ -43,6 +47,10 @@ app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/admin/stats', statsRoutes);
 app.use('/api/v1/gallery-items', galleryItemRoutes);
 app.use('/api/v1/homepage', homepageRoutes);
+app.use('/api/v1/alumni', alumniRoutes);
+app.use('/api/v1/testimonials', testimonialRoutes);
+app.use('/api/v1/partners', partnerRoutes);
+app.use('/api/v1/titles', titleRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {

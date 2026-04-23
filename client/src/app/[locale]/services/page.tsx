@@ -11,7 +11,7 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 
-const categories = ['all', 'photography', 'videography', 'editing', 'design', 'event-coverage'];
+const categories = ['all', 'photography', 'videography', 'editing', 'design', 'event-coverage', 'photo-printing', 'private-upload', 'photo-booth'];
 
 export default function ServicesPage() {
   const params = useParams();
@@ -28,6 +28,9 @@ export default function ServicesPage() {
     editing: { ar: 'تحرير', en: 'Editing' },
     design: { ar: 'تصميم', en: 'Design' },
     'event-coverage': { ar: 'تغطية فعاليات', en: 'Event Coverage' },
+    'photo-printing': { ar: 'طباعة صور', en: 'Photo Printing' },
+    'private-upload': { ar: 'رفع الصور - خاص', en: 'Private Photo Upload' },
+    'photo-booth': { ar: 'بوث تصوير', en: 'Photo Booth' },
   };
 
   useEffect(() => {
