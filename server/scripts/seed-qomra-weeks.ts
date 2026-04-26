@@ -58,11 +58,7 @@ async function main() {
       totalPhotos: week7Photos.length,
       startDate: new Date('2022-04-15'),
       endDate: new Date('2022-04-22'),
-      winners: [
-        { place: 1, name: { ar: 'أحمد العلوي', en: 'Ahmed Al-Alawi' }, prize: { ar: 'الجائزة الذهبية', en: 'Gold Prize' } },
-        { place: 2, name: { ar: 'سارة المعمري', en: 'Sara Al-Maamari' }, prize: { ar: 'الجائزة الفضية', en: 'Silver Prize' } },
-        { place: 3, name: { ar: 'محمد البلوشي', en: 'Mohammed Al-Balushi' }, prize: { ar: 'الجائزة البرونزية', en: 'Bronze Prize' } },
-      ],
+      winners: [],
       judges: [
         { name: { ar: 'د. خالد الزدجالي', en: 'Dr. Khaled Al-Zadjali' }, title: { ar: 'مصور محترف', en: 'Professional Photographer' } },
         { name: { ar: 'فاطمة العامري', en: 'Fatima Al-Amri' }, title: { ar: 'فنانة بصرية', en: 'Visual Artist' } },
@@ -112,11 +108,7 @@ async function main() {
       totalPhotos: week8Photos.length,
       startDate: new Date('2023-04-10'),
       endDate: new Date('2023-04-17'),
-      winners: [
-        { place: 1, name: { ar: 'أحمد الفارسي', en: 'Ahmed Al-Farsi' }, prize: { ar: 'الجائزة الذهبية', en: 'Gold Prize' } },
-        { place: 2, name: { ar: 'لطيفة الشكيلي', en: 'Latifa Al-Shukaili' }, prize: { ar: 'الجائزة الفضية', en: 'Silver Prize' } },
-        { place: 3, name: { ar: 'بدر الكلباني', en: 'Badr Al-Kalbani' }, prize: { ar: 'الجائزة البرونزية', en: 'Bronze Prize' } },
-      ],
+      winners: [],
       judges: [
         { name: { ar: 'م. سلطان المنذري', en: 'Eng. Sultan Al-Mundhri' }, title: { ar: 'مصور صحفي', en: 'Photojournalist' } },
         { name: { ar: 'د. منى الراشدي', en: 'Dr. Mona Al-Rashdi' }, title: { ar: 'أستاذة الفنون البصرية', en: 'Visual Arts Professor' } },

@@ -149,8 +149,8 @@ async function main() {
         photographerName: { ar: '', en: '' }, // photographer credits unknown
         imageUrl: u.url,
         thumbnailUrl: u.url,
-        isWinner: i < 3, // mark first 3 as winners (placeholder)
-        winnerPlace: i < 3 ? i + 1 : 0,
+        isWinner: false,
+        winnerPlace: 0,
         sortOrder: i,
         isPublished: true,
       },
