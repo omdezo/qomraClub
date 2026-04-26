@@ -77,7 +77,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-primary text-white flex">
+    <div data-admin className="min-h-screen bg-primary text-white flex">
       {/* Sidebar */}
       <aside
         className={cn(

@@ -23,6 +23,35 @@
     overflow-x: clip;
   }
 
+  /* Image protection — block drag/save on every <img> on public pages.
+     Admin pages and elements with .allow-save opt out. */
+  img:not(.allow-save) {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Admin area — allow normal image interactions */
+  [data-admin] img {
+    -webkit-user-drag: auto !important;
+    user-drag: auto !important;
+    -webkit-touch-callout: default !important;
+    -webkit-user-select: auto !important;
+    user-select: auto !important;
+    pointer-events: auto !important;
+  }
+
+  /* Re-enable interactions on the protected image wrapper itself */
+  .protected-image {
+    pointer-events: auto;
+  }
+
   /* ClassicNums first → renders digits as Playfair Display, everything else falls through to Dialogue Me */
   .font-dialogue {
     font-family: 'ClassicNums', var(--font-dialogue), sans-serif;

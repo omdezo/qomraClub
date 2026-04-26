@@ -6,6 +6,7 @@ import type { Locale } from '@/types';
 import GalleryHero from '@/components/gallery/GalleryHero';
 import SpotlightGallery from '@/components/animations/SpotlightGallery';
 import ExpandingGrid from '@/components/animations/ExpandingGrid';
+import { useImageProtection } from '@/hooks/useImageProtection';
 
 interface GalleryClientProps {
   locale: Locale;
@@ -17,6 +18,8 @@ export default function GalleryClient({ locale, dict }: GalleryClientProps) {
   const [spotlightItems, setSpotlightItems] = useState<{ image: string; name: string }[]>([]);
   const [gridItems, setGridItems] = useState<{ name: string; year: number | string; img: string }[]>([]);
   const [ready, setReady] = useState(false);
+
+  useImageProtection();
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import api from '@/lib/api';
 import { getBilingual, localizeNum } from '@/lib/utils';
 import type { Locale } from '@/types';
+import ProtectedImage from '@/components/ui/ProtectedImage';
+import { useImageProtection } from '@/hooks/useImageProtection';
 
 interface Edition {
   id: string;
@@ -60,6 +62,8 @@ export default function QomraWeekEditionPage() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<WeekPhoto | null>(null);
 
+  useImageProtection();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -111,10 +115,9 @@ export default function QomraWeekEditionPage() {
       {/* ───── Hero with cover image ───── */}
       <section className="relative h-[80vh] min-h-[500px] overflow-hidden">
         {edition.coverImageUrl && (
-          <img
+          <ProtectedImage
             src={edition.coverImageUrl}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
+            className="absolute inset-0 w-full h-full opacity-40"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/30 via-[#0a0a0a]/60 to-[#0a0a0a]" />
@@ -230,13 +233,12 @@ export default function QomraWeekEditionPage() {
                     className="group text-start"
                   >
                     <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-4 bg-elevated">
-                      <img
+                      <ProtectedImage
                         src={p.imageUrl}
-                        alt=""
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="eager"
+                        className="w-full h-full transition-transform duration-700 group-hover:scale-105"
+                        eager
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                       <div
                         className="absolute top-4 start-4 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide backdrop-blur-md"
                         style={{ backgroundColor: `${color}33`, color, border: `1px solid ${color}55` }}
@@ -285,13 +287,11 @@ export default function QomraWeekEditionPage() {
                   className="group text-start"
                 >
                   <div className="relative aspect-square rounded-lg overflow-hidden bg-elevated mb-3">
-                    <img
+                    <ProtectedImage
                       src={p.imageUrl}
-                      alt=""
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
+                      className="w-full h-full transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors pointer-events-none" />
                   </div>
                   <p className="text-sm text-white/70 truncate group-hover:text-accent transition-colors">
                     {getBilingual(p.title, locale)}
@@ -359,10 +359,12 @@ export default function QomraWeekEditionPage() {
             className="max-w-5xl w-full max-h-[85vh] flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
+            <ProtectedImage
               src={selected.imageUrl}
-              alt=""
-              className="max-w-full max-h-[75vh] object-contain rounded-lg"
+              fit="contain"
+              className="max-w-full max-h-[75vh] rounded-lg"
+              style={{ width: '100%', height: '75vh' }}
+              watermark="Qomra"
             />
             <div className="text-center mt-6">
               <h3 className="text-xl text-white font-light mb-1">{getBilingual(selected.title, locale)}</h3>
