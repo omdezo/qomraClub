@@ -4,6 +4,7 @@ import { getDictionary } from '@/lib/i18n';
 import type { Locale } from '@/types';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import IntroOverlay from '@/components/layout/IntroOverlay';
 
 export async function generateStaticParams() {
   return [{ locale: 'ar' }, { locale: 'en' }];
@@ -37,6 +38,7 @@ export default async function LocaleLayout({
 
   return (
     <div lang={locale} dir={dir} className="font-dialogue">
+      <IntroOverlay locale={locale} />
       <LenisProvider>
         <Navbar locale={locale} dict={dict} />
         <main className="min-h-screen">{children}</main>
