@@ -26,35 +26,23 @@ export default function GalleryClient({ locale, dict }: GalleryClientProps) {
   }, []);
 
   useEffect(() => {
-    Promise.all([
-      api.get('/gallery-items?section=hero-preview').catch(() => ({ data: [] })),
-      api.get('/gallery-items?section=spotlight').catch(() => ({ data: [] })),
-      api.get('/gallery-items?section=grid').catch(() => ({ data: [] })),
-    ]).then(([heroRes, spotRes, gridRes]) => {
-      // Hero preview images
-      const heroData = heroRes.data;
-      setHeroImages(heroData.length > 0
-        ? heroData.map((item: any) => item.image)
-        : []
-      );
+    // Pull random photos from the Qomra Week pool — rotates daily
+    api.get('/random-photos?count=40')
+      .then(({ data }) => {
+        const urls: string[] = (data || []).map((p: any) => p.imageUrl).filter(Boolean);
 
-      // Spotlight
-      const spotData = spotRes.data;
-      setSpotlightItems(spotData.map((item: any) => ({
-        image: item.image,
-        name: locale === 'ar' ? item.name.ar : item.name.en,
-      })));
+        // Hero: 3 images
+        setHeroImages(urls.slice(0, 3));
 
-      // Grid
-      const gData = gridRes.data;
-      setGridItems(gData.map((item: any) => ({
-        img: item.image,
-        name: locale === 'ar' ? item.name.ar : item.name.en,
-        year: item.year,
-      })));
+        // Spotlight: 10 images (no names — display-only)
+        setSpotlightItems(urls.slice(3, 13).map((u) => ({ image: u, name: '' })));
 
-      setReady(true);
-    });
+        // Grid: remaining (up to 16)
+        setGridItems(urls.slice(13, 29).map((u) => ({ img: u, name: '', year: '' })));
+
+        setReady(true);
+      })
+      .catch(() => setReady(true));
   }, [locale]);
 
   if (!ready) {

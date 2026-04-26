@@ -26,27 +26,61 @@ export default function HomePage() {
   const locale = (params?.locale as Locale) || 'ar';
   const dict = locale === 'ar' ? arDict : enDict;
   const [sections, setSections] = useState<Section[]>([]);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    api.get('/homepage')
-      .then(({ data }) => setSections(data))
-      .catch(() => {})
-      .finally(() => setLoaded(true));
+    Promise.all([
+      api.get('/homepage').catch(() => ({ data: [] })),
+      api.get('/random-photos?count=40').catch(() => ({ data: [] })),
+    ]).then(([secRes, photoRes]) => {
+      setSections(secRes.data || []);
+      const urls = (photoRes.data || []).map((p: any) => p.imageUrl).filter(Boolean);
+      setPhotos(urls);
+      setLoaded(true);
+    });
   }, []);
 
   const getSection = (name: string) => sections.find((s) => s.section === name);
 
   const hero = getSection('hero');
-  const parallax = getSection('parallax');
   const qomraWeek = getSection('qomraWeek');
   const featured = getSection('featured');
   const events = getSection('events');
   const joinCta = getSection('joinCta');
 
+  // Slice the random photos pool into the sections that need images
+  const heroImg = photos[0] || hero?.data?.heroImage || '';
+  const parallaxImages = photos.slice(1, 17); // 16 images
+  const qomraWeekPreviews = photos.slice(17, 20); // 3 images
+  const featuredImages = photos.slice(20, 28); // 8 images
+
+  // Override section data with random photos
+  const qomraWeekData = qomraWeek?.data ? {
+    ...qomraWeek.data,
+    editionCoverImages: qomraWeekPreviews.length ? qomraWeekPreviews : qomraWeek.data.editionCoverImages,
+    previewImages: qomraWeekPreviews.length ? qomraWeekPreviews : qomraWeek.data.previewImages,
+  } : { previewImages: qomraWeekPreviews };
+
+  const featuredData = featured?.data ? {
+    ...featured.data,
+    featuredWorks: featuredImages.length
+      ? featuredImages.map((img) => ({
+          image: img,
+          title: { ar: '', en: '' },
+          photographer: { ar: '', en: '' },
+        }))
+      : featured.data.featuredWorks,
+  } : {
+    featuredWorks: featuredImages.map((img) => ({
+      image: img,
+      title: { ar: '', en: '' },
+      photographer: { ar: '', en: '' },
+    })),
+  };
+
   return (
     <>
-      {/* Hero — always show, use API data if available */}
       <CinematicHero
         locale={locale}
         dict={{
@@ -55,41 +89,36 @@ export default function HomePage() {
             heroSubtitle: hero?.data?.heroSubtitle?.[locale] || (locale === 'ar' ? 'جماعة التصوير الفوتوغرافي — نلتقط ما لا يُرى ونروي ما لا يُقال' : 'The photography collective — we capture the unseen and tell the untold'),
           },
         }}
-        heroImage={hero?.data?.heroImage}
+        heroImage={heroImg}
       />
 
-      {/* Parallax Columns */}
-      {(!loaded || parallax?.enabled !== false) && (
+      {parallaxImages.length > 0 && (
         <ParallaxColumns
-          images={parallax?.data?.parallaxImages}
-          centerText={parallax?.data?.parallaxText?.[locale] || (locale === 'ar'
-            ? 'لحظات من الحركة والأجواء تجتمع في مجموعة هادئة من اللقطات البصرية'
-            : 'Fragments of motion and atmosphere gathered into a drifting collection of quiet visual moments')}
+          images={parallaxImages}
+          centerText={
+            locale === 'ar'
+              ? 'لحظات من الحركة والأجواء تجتمع في مجموعة هادئة من اللقطات البصرية'
+              : 'Fragments of motion and atmosphere gathered into a drifting collection of quiet visual moments'
+          }
         />
       )}
 
-      {/* Qomra Week Banner */}
       {(!loaded || qomraWeek?.enabled !== false) && (
-        <HomeQomraWeek locale={locale} data={qomraWeek?.data} />
+        <HomeQomraWeek locale={locale} data={qomraWeekData} />
       )}
 
-      {/* Featured Works */}
       {(!loaded || featured?.enabled !== false) && (
-        <HomeFeatured locale={locale} data={featured?.data} />
+        <HomeFeatured locale={locale} data={featuredData} />
       )}
 
-      {/* Events */}
       {(!loaded || events?.enabled !== false) && (
         <HomeEvents locale={locale} />
       )}
 
-      {/* Testimonials — قالوا عنا */}
       <HomeTestimonials locale={locale} dict={dict} />
 
-      {/* Partners — شركاء النجاح */}
       <HomePartners locale={locale} dict={dict} />
 
-      {/* Join CTA */}
       {(!loaded || joinCta?.enabled !== false) && (
         <HomeJoin locale={locale} data={joinCta?.data} />
       )}

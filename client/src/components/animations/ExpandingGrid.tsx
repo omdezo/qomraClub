@@ -130,13 +130,9 @@ export default function ExpandingGrid({ items, locale = 'en' }: ExpandingGridPro
               <div className="expanding-grid-item-img">
                 <img
                   src={item.img}
-                  alt={item.name}
+                  alt=""
                   loading={rowIndex < 2 ? 'eager' : 'lazy'}
                 />
-              </div>
-              <div className="expanding-grid-item-info">
-                <p>{item.name}</p>
-                <p>{localizeNum(item.year, locale)}</p>
               </div>
             </div>
           ))}

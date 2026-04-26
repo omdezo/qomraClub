@@ -21,6 +21,7 @@ import alumniRoutes from './routes/alumniRoutes';
 import testimonialRoutes from './routes/testimonialRoutes';
 import partnerRoutes from './routes/partnerRoutes';
 import titleRoutes from './routes/titleRoutes';
+import randomPhotosRoutes from './routes/randomPhotosRoutes';
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/v1/alumni', alumniRoutes);
 app.use('/api/v1/testimonials', testimonialRoutes);
 app.use('/api/v1/partners', partnerRoutes);
 app.use('/api/v1/titles', titleRoutes);
+app.use('/api/v1/random-photos', randomPhotosRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {

@@ -246,10 +246,6 @@ export default function QomraWeekEditionPage() {
                         {getBilingual(placeLabels[p.winnerPlace], locale)}
                       </div>
                     </div>
-                    <h3 className="text-lg font-light text-white mb-1 group-hover:text-accent transition-colors">
-                      {getBilingual(p.title, locale)}
-                    </h3>
-                    <p className="text-sm text-white/40">{getBilingual(p.photographerName, locale)}</p>
                   </motion.button>
                 );
               })}
@@ -286,19 +282,13 @@ export default function QomraWeekEditionPage() {
                   onClick={() => setSelected(p)}
                   className="group text-start"
                 >
-                  <div className="relative aspect-square rounded-lg overflow-hidden bg-elevated mb-3">
+                  <div className="relative aspect-square rounded-lg overflow-hidden bg-elevated">
                     <ProtectedImage
                       src={p.imageUrl}
                       className="w-full h-full transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors pointer-events-none" />
                   </div>
-                  <p className="text-sm text-white/70 truncate group-hover:text-accent transition-colors">
-                    {getBilingual(p.title, locale)}
-                  </p>
-                  <p className="text-xs text-white/30 truncate">
-                    {getBilingual(p.photographerName, locale)}
-                  </p>
                 </motion.button>
               ))}
             </div>
@@ -362,14 +352,10 @@ export default function QomraWeekEditionPage() {
             <ProtectedImage
               src={selected.imageUrl}
               fit="contain"
-              className="max-w-full max-h-[75vh] rounded-lg"
-              style={{ width: '100%', height: '75vh' }}
+              className="max-w-full max-h-[85vh] rounded-lg"
+              style={{ width: '100%', height: '85vh' }}
               watermark="Qomra"
             />
-            <div className="text-center mt-6">
-              <h3 className="text-xl text-white font-light mb-1">{getBilingual(selected.title, locale)}</h3>
-              <p className="text-sm text-accent/80">{getBilingual(selected.photographerName, locale)}</p>
-            </div>
           </div>
         </div>
       )}
