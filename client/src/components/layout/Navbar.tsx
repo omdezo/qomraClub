@@ -17,10 +17,10 @@ const navItems = [
   { key: 'about', href: '/about' },
   { key: 'gallery', href: '/gallery' },
   { key: 'qomraWeek', href: '/qomra-week' },
-  { key: 'events', href: '/events' },
-  { key: 'alumni', href: '/alumni' },
+  // { key: 'events', href: '/events' },     // hidden temporarily
+  // { key: 'alumni', href: '/alumni' },     // hidden temporarily
   { key: 'titles', href: '/titles' },
-  { key: 'learn', href: '/learn' },
+  // { key: 'learn', href: '/learn' },       // hidden temporarily (مقالات)
   { key: 'services', href: '/services' },
   { key: 'contact', href: '/contact' },
 ];

@@ -25,7 +25,7 @@ export default function Footer({ locale, dict }: FooterProps) {
               {locale === 'ar' ? 'روابط سريعة' : 'Quick Links'}
             </h4>
             <div className="grid grid-cols-2 gap-2">
-              {['about', 'gallery', 'events', 'contact'].map((key) => (
+              {['about', 'gallery', 'titles', 'contact'].map((key) => (
                 <a
                   key={key}
                   href={`/${locale}/${key}`}
